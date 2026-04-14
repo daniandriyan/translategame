@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.spec
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Project Data (cache, logs, output)
+data/cache/
+data/logs/
+output/
+*.log
+
+# ROM files (jangan commit ROM game!)
+*.3ds
+*.cci
+*.nds
+*.gba
+*.iso
+*.cso
+*.rom
+
+# Buildozer
+.buildozer/
+bin/
+
+# Translation cache (user data)
+data/cache/translation_cache.json
+
+# Custom dictionaries (user data - opsional)
+# data/dictionaries/*.json
+
+# Environment variables
+.env
+*.env
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/

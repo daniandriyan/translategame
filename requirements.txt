@@ -1,0 +1,15 @@
+# Core GUI
+customtkinter>=5.2.0
+darkdetect>=0.8.0
+Pillow>=10.0.0
+
+# Translation Engine
+g4f>=0.3.0.0
+requests>=2.31.0
+huggingface-hub>=0.20.0
+
+# Utilities
+packaging>=23.0
+
+# Testing (optional)
+pytest>=7.4.0
