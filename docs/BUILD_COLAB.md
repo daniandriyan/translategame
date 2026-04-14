@@ -94,18 +94,32 @@ print("✅ Build selesai! APK sudah ada di Google Drive Anda.")
 
 ## 📋 Langkah Detail
 
-### Step 1: Siapkan Project di Google Drive
+### Step 1: Siapkan Project
 
-**Opsi A: Upload dari Lokal**
+**REKOMENDASI: Clone langsung dari GitHub (Paling Mudah!)**
+
+Tidak perlu upload manual ke Google Drive. Cukup clone repository langsung di Colab:
+
+```python
+# Di Colab notebook - Clone repository
+!git clone https://github.com/daniandriyan/translategame.git
+%cd /content/translategame/build
+```
+
+**Keuntungan clone dari GitHub:**
+- ✅ **Lebih cepat** - tidak perlu upload manual
+- ✅ **Selalu update** - dapat versi terbaru
+- ✅ **Tidak perlu Google Drive storage**
+- ✅ **Siapa saja bisa build** - tinggal buka Colab & run
+
+**Opsi Alternatif: Upload Manual ke Google Drive**
+
+Jika ingin upload sendiri:
 1. Buka [Google Drive](https://drive.google.com/)
-2. Buat folder `translator-game-emulator`
+2. Buat folder `translategame`
 3. Upload seluruh folder project dari komputer lokal
 
-**Opsi B: Clone dari GitHub (jika ada repo)**
-```python
-# Di Colab notebook
-!git clone https://github.com/username/translator-game-emulator.git
-```
+> **Note:** Yang perlu di-upload hanya **source code**, bukan folder `build/.buildozer/` atau `build/bin/` (akan di-generate otomatis saat build).
 
 ### Step 2: Buka Google Colab
 
@@ -153,9 +167,38 @@ print("✅ Dependencies installed successfully!")
 
 **Jalankan Cell:** Klik tombol ▶️ di sebelah cell atau tekan `Ctrl+Enter`
 
-### Step 4: Mount Google Drive & Copy Project
+### Step 4: Clone Project dari GitHub
 
 Copy-paste ke **Cell 2**:
+
+```python
+# @title Clone Project dari GitHub
+import os
+
+# Clone repository langsung dari GitHub
+!git clone https://github.com/daniandriyan/translategame.git
+
+# Masuk ke folder build
+%cd /content/translategame/build
+
+# Verifikasi file buildozer.spec ada
+!ls -la buildozer.spec
+!ls -la main_kivy.py
+
+print("✅ Project siap untuk build!")
+```
+
+**Jalankan Cell:** `Ctrl+Enter`
+
+**Keuntungan clone dari GitHub:**
+- ✅ Tidak perlu upload manual ke Google Drive
+- ✅ Selalu dapat versi terbaru
+- ✅ Tidak perlu storage Google Drive
+- ✅ Siapapun bisa build tanpa setup ribet
+
+**Opsi Alternatif: Mount Google Drive**
+
+Jika project sudah ada di Drive Anda:
 
 ```python
 # @title Mount Drive & Setup Project
@@ -166,14 +209,14 @@ import os
 drive.mount('/content/drive')
 
 # Cek apakah project sudah ada di Drive
-project_path = '/content/drive/MyDrive/translator-game-emulator'
+project_path = '/content/drive/MyDrive/translategame'
 if os.path.exists(project_path):
     !cp -r $project_path /content/
-    %cd /content/translator-game-emulator/build
+    %cd /content/translategame/build
     print("✅ Project copied to Colab!")
 else:
-    print("⚠️ Project not found in Drive. Please upload first!")
-    print("📁 Path: /content/drive/MyDrive/translator-game-emulator")
+    print("⚠️ Project not found in Drive. Clone from GitHub instead!")
+    print("📁 Path: /content/drive/MyDrive/translategame")
 
 # Verify buildozer.spec exists
 !ls -la buildozer.spec
@@ -193,10 +236,12 @@ Copy-paste ke **Cell 3**:
 
 ```python
 # @title Build APK (Debug Mode)
-import subprocess
 import time
 
 start_time = time.time()
+
+# Pastikan di folder build yang benar
+%cd /content/translategame/build
 
 # Build APK
 !buildozer android debug
@@ -227,16 +272,16 @@ import glob
 import os
 
 # Find APK files
-apk_files = glob.glob('/content/translator-game-emulator/build/bin/*.apk')
+apk_files = glob.glob('/content/translategame/build/bin/*.apk')
 
 if apk_files:
     print(f"✅ Found {len(apk_files)} APK file(s):\n")
     for apk in apk_files:
         size = os.path.getsize(apk) / (1024 * 1024)  # MB
         print(f"📱 {os.path.basename(apk)} ({size:.2f} MB)")
-    
+
     # Copy APK to Google Drive (for permanent storage)
-    !cp /content/translator-game-emulator/build/bin/*.apk /content/drive/MyDrive/
+    !cp /content/translategame/build/bin/*.apk /content/drive/MyDrive/
     print("\n✅ APK copied to Google Drive!")
     print("📁 Location: /MyDrive/ in your Google Drive")
 else:
@@ -255,7 +300,7 @@ else:
 **Opsi B: Direct Download dari Colab**
 ```python
 from google.colab import files
-files.download('/content/translator-game-emulator/build/bin/emulator_translator-1.0.0-debug.apk')
+files.download('/content/translategame/build/bin/emulator_translator-1.0.0-debug.apk')
 ```
 
 ---
@@ -311,9 +356,19 @@ os.environ['ANDROID_SDK_ROOT'] = '/root/.buildozer/android/platform/android-sdk'
 
 ```python
 # Clean dan build ulang
-%cd /content/translator-game-emulator/build
+%cd /content/translategame/build
 !rm -rf .buildozer
 !buildozer android debug
+```
+
+### Error: "Repository not found" atau "Clone failed"
+
+```python
+# Pastikan URL GitHub benar
+!git clone https://github.com/daniandriyan/translategame.git
+
+# Atau clone dengan verbose untuk lihat detail error
+!git clone -v https://github.com/daniandriyan/translategame.git
 ```
 
 ### Colab Runtime Terputus
@@ -375,26 +430,38 @@ Berikut template lengkap yang bisa langsung copy-paste ke Colab:
 print("✅ Dependencies installed!")
 
 # =============================================
-# CELL 2: Mount Drive & Copy Project
+# CELL 2: Clone Project dari GitHub
 # =============================================
-from google.colab import drive
 import os
 
-drive.mount('/content/drive')
+# Clone repository langsung dari GitHub (REKOMENDASI)
+!git clone https://github.com/daniandriyan/translategame.git
+%cd /content/translategame/build
 
-project_path = '/content/drive/MyDrive/translator-game-emulator'
-if os.path.exists(project_path):
-    !cp -r $project_path /content/
-    %cd /content/translator-game-emulator/build
-    print("✅ Project ready!")
+# Verifikasi file penting ada
+if os.path.exists('buildozer.spec'):
+    print("✅ buildozer.spec found!")
 else:
-    print("⚠️ Upload project to Google Drive first!")
-    print("📁 Create folder: /MyDrive/translator-game-emulator")
+    print("❌ buildozer.spec NOT found!")
+
+if os.path.exists('main_kivy.py'):
+    print("✅ main_kivy.py found!")
+else:
+    print("❌ main_kivy.py NOT found!")
+
+print("✅ Project ready to build!")
 
 # =============================================
 # CELL 3: Build APK
 # =============================================
+import time
+
+start_time = time.time()
+
 !buildozer android debug
+
+elapsed = time.time() - start_time
+print(f"\n✅ Build completed in {elapsed/60:.2f} minutes!")
 
 # =============================================
 # CELL 4: Download APK
@@ -402,13 +469,14 @@ else:
 import glob
 import os
 
-apk_files = glob.glob('/content/translator-game-emulator/build/bin/*.apk')
+apk_files = glob.glob('/content/translategame/build/bin/*.apk')
 if apk_files:
     for apk in apk_files:
         size = os.path.getsize(apk) / (1024 * 1024)
         print(f"📱 {os.path.basename(apk)} ({size:.2f} MB)")
-    
-    !cp /content/translator-game-emulator/build/bin/*.apk /content/drive/MyDrive/
+
+    # Copy ke Google Drive
+    !cp /content/translategame/build/bin/*.apk /content/drive/MyDrive/
     print("\n✅ APK saved to Google Drive!")
 else:
     print("❌ Build failed or APK not found")
@@ -469,25 +537,58 @@ adb install emulator_translator-*-debug.apk
 
 ### Persistent Storage
 
-**Simpan .buildozer folder di Drive:**
+**Simpan .buildozer folder di Drive (opsional):**
 ```python
-# Supaya build berikutnya lebih cepat
-!cp -r /content/translator-game-emulator/build/.buildozer /content/drive/MyDrive/
+# Supaya build berikutnya lebih cepat (tidak perlu download ulang)
+!cp -r /content/translategame/build/.buildozer /content/drive/MyDrive/
 
 # Restore di build selanjutnya
-!cp -r /content/drive/MyDrive/.buildozer /content/translator-game-emulator/build/
+!cp -r /content/drive/MyDrive/.buildozer /content/translategame/build/
 ```
+
+> **Note:** Tidak wajib karena `.buildozer` tidak ada di repository. Buildozer akan download ulang saat build pertama kali.
 
 ---
 
 ## ✅ Checklist Sebelum Build
 
-- [ ] Project sudah di-upload ke Google Drive
+- [ ] Repository GitHub sudah ada ([github.com/daniandriyan/translategame](https://github.com/daniandriyan/translategame))
 - [ ] Colab notebook sudah dibuat
-- [ ] Semua dependencies cell sudah di-run
-- [ ] Drive sudah di-mount
+- [ ] Cell 1 (Dependencies) sudah di-run
+- [ ] Cell 2 (Clone Project) sudah di-run & verifikasi file ada
 - [ ] Koneksi internet stabil
 - [ ] Waktu cukup (30+ menit untuk pertama kali)
+
+---
+
+## 📂 Apa yang Ada di Repository?
+
+**File yang DI-COMMIT ke GitHub:**
+```
+📁 translategame/
+├── build/
+│   ├── buildozer.spec   ✅ Konfigurasi build
+│   └── main_kivy.py     ✅ Kivy app untuk Android
+├── core/                ✅ ROM Loader, Extractor, Injector
+├── translators/         ✅ G4F, Ollama, HuggingFace
+├── gui/                 ✅ Desktop GUI
+├── utils/               ✅ Utilities
+├── docs/                ✅ Dokumentasi lengkap
+├── main.py              ✅ Entry point desktop
+├── config.py            ✅ Konfigurasi
+└── requirements.txt     ✅ Dependencies
+```
+
+**File yang TIDAK DI-COMMIT (diabaikan .gitignore):**
+```
+❌ build/.buildozer/     ❌ Build artifacts (2GB+, di-generate saat build)
+❌ build/bin/            ❌ Output APK (hasil build)
+❌ build/build.log       ❌ Log file
+❌ data/cache/           ❌ Cache files
+❌ output/               ❌ Output files
+```
+
+> **Note:** Saat user run `buildozer android debug` di Colab, Buildozer akan otomatis generate semua artifacts yang diperlukan.
 
 ---
 
@@ -503,3 +604,12 @@ Jika ada masalah:
 **Happy Building! 🚀**
 
 *Build APK di cloud, main game di Android!*
+
+---
+
+## 🔗 Links
+
+- **Repository GitHub:** [github.com/daniandriyan/translategame](https://github.com/daniandriyan/translategame)
+- **Panduan Termux (Android):** [BUILD_TERMOX.md](BUILD_TERMOX.md)
+- **Usage Guide:** [USAGE_GUIDE.md](USAGE_GUIDE.md)
+- **Architecture Docs:** [ARCHITECTURE.md](ARCHITECTURE.md)
