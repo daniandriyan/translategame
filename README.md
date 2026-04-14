@@ -291,6 +291,8 @@ TRANSLATION_CONFIG["primary_provider"] = "ollama"
 
 ---
 
+---
+
 ## ☁️ Build APK di Google Colab (Gratis!)
 
 Tidak punya komputer kuat? Build APK langsung di cloud dengan Google Colab!
